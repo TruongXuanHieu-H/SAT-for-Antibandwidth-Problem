@@ -15,7 +15,6 @@ namespace SATABP
 
     private:
         bool is_debug_mode = false;
-        bool isUsingProductAndSEQ = true;
 
         int vertices_aux_var = 0;
         int labels_aux_var = 0;
@@ -37,12 +36,10 @@ namespace SATABP
 
         int do_vars_size() const final;
 
-        int get_aux_var(int symbolicAuxVar);
         int get_obj_k_aux_var(int first, int last);
 
         void encode_vertices();
         void encode_labels();
-        void encode_exactly_one_NSC(std::vector<int> listVars, int auxVar);
         void encode_exactly_one_product(const std::vector<int> &vars);
         void encode_amo_seq(const std::vector<int> &vars);
 

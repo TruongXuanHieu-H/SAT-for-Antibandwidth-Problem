@@ -7,11 +7,6 @@
 #include <assert.h>
 #include <cmath>
 
-/*
-    Find more details about New Sequential Counter Encoding in
-    document named "New Sequential Counter Encoding for Cardinality
-    Constraints" - PhD To Van Khanh et al.
-*/
 namespace SATABP
 {
     LadderEncoder::LadderEncoder(Graph *g, ClauseContainer *cc, VarHandler *vh) : Encoder(g, cc, vh)
@@ -19,18 +14,6 @@ namespace SATABP
     }
 
     LadderEncoder::~LadderEncoder() {}
-
-    int LadderEncoder::get_aux_var(int symbolicAuxVar)
-    {
-        auto pair = aux_vars.find(symbolicAuxVar);
-
-        if (pair != aux_vars.end())
-            return pair->second;
-
-        int new_aux_var = vh->get_new_var();
-        aux_vars.insert({symbolicAuxVar, new_aux_var});
-        return new_aux_var;
-    }
 
     int LadderEncoder::get_obj_k_aux_var(int first, int last)
     {
@@ -115,12 +98,7 @@ namespace SATABP
             std::generate(node_vertices_eo.begin(), node_vertices_eo.end(), [this, &j, i]()
                           { return (j++ * g->n) + i + 1; });
 
-            if (isUsingProductAndSEQ)
-            {
-                encode_exactly_one_product(node_vertices_eo);
-            }
-            else
-                encode_exactly_one_NSC(node_vertices_eo, vertices_aux_var + i * g->n);
+            encode_exactly_one_product(node_vertices_eo);
         }
     }
 
@@ -139,67 +117,7 @@ namespace SATABP
             std::vector<int> node_labels_eo(g->n);
             std::iota(node_labels_eo.begin(), node_labels_eo.end(), (i * g->n) + 1);
 
-            if (isUsingProductAndSEQ)
-            {
-                encode_exactly_one_product(node_labels_eo);
-            }
-            else
-                encode_exactly_one_NSC(node_labels_eo, labels_aux_var + i * g->n);
-        }
-    }
-
-    void LadderEncoder::encode_exactly_one_NSC(std::vector<int> listVars, int auxVar)
-    {
-        // Exactly one variables in listVars is True
-        // Using NSC to encode AMO and ALO, EO = AMO and ALO
-        // Auxilian variables starts from auxVar + 1
-
-        int listVarsSize = listVars.size();
-
-        // Constraint 1: Xi -> R(i, 1) for i in [1, n - 1]
-        // In CNF: not(Xi) or R(i, 1)
-        for (int i = 1; i <= listVarsSize - 1; i++)
-        {
-            cv->add_clause({-listVars[i - 1], get_aux_var(auxVar + i)});
-            num_l_v_constraints++;
-        }
-
-        // Constraint 2: R(i-1, 1) -> R(i, 1) for i in [2, n - 1]
-        // In CNF: not(R(i-1, 1)) or R(i, 1)
-        for (int i = 2; i <= listVarsSize - 1; i++)
-        {
-            cv->add_clause({-(get_aux_var(auxVar + i - 1)), get_aux_var(auxVar + i)});
-            num_l_v_constraints++;
-        }
-
-        // Constraint 3: Since k = 1 (Exactly 1 constraint), this constraint is empty and then skipped.
-
-        // Constraint 4: not(Xi) and not(R(i-1, 1)) -> not(R(i, 1)) for i in [2, n - 1]
-        // In CNF: Xi or R(i-1, 1) or not (R(i, 1))
-        for (int i = 2; i <= listVarsSize - 1; i++)
-        {
-            cv->add_clause({listVars[i - 1], get_aux_var(auxVar + i - 1), -(get_aux_var(auxVar + i))});
-            num_l_v_constraints++;
-        }
-
-        // Constraint 5: not(X1) -> not(R(1,1))
-        // In CNF: X1 or not(R(1,1))
-        cv->add_clause({listVars[0], -(get_aux_var(auxVar + 1))});
-        num_l_v_constraints++;
-
-        // Constraint 6: Since k = 1 (Exactly 1 constraint), this constraint is empty and then skipped.
-
-        // Constraint 7: (At Least k) R(n-1, 1) or Xn
-        // In CNF: R(n-1, 1) or Xn
-        cv->add_clause({get_aux_var(auxVar + listVarsSize - 1), listVars[listVarsSize - 1]});
-        num_l_v_constraints++;
-
-        // Constraint 8: (At Most k) Xi -> not(R(i-1,1)) for i in [k + 1, n]
-        // In CNF: not(Xi) or not(R(i-1,1))
-        for (int i = 2; i <= listVarsSize; i++)
-        {
-            cv->add_clause({-listVars[i - 1], -(get_aux_var(auxVar + i - 1))});
-            num_l_v_constraints++;
+            encode_exactly_one_product(node_labels_eo);
         }
     }
 
@@ -300,7 +218,7 @@ namespace SATABP
         if (is_debug_mode)
             std::cout << "Encode stair " << stair << " with width " << w << std::endl;
 
-        for (int gw = 0; gw < ceil((float)g->n / w); gw++)
+        for (int gw = 0; gw < ceil((float)(g->n + w - 1) / w); gw++)
         {
             if (is_debug_mode)
                 std::cout << "Encode window " << gw << std::endl;

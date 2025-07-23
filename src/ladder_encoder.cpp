@@ -218,7 +218,7 @@ namespace SATABP
         if (is_debug_mode)
             std::cout << "Encode stair " << stair << " with width " << w << std::endl;
 
-        for (int gw = 0; gw < ceil((float)(g->n + w - 1) / w); gw++)
+        for (int gw = 0; gw < ceil((float)g->n / w); gw++)
         {
             if (is_debug_mode)
                 std::cout << "Encode window " << gw << std::endl;

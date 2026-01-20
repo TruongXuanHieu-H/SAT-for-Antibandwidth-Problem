@@ -23,7 +23,7 @@ namespace SATABP
 		reduced,
 		seq,
 		product,
-		ladder,
+		scl,
 	};
 
 	enum IterativeStrategy

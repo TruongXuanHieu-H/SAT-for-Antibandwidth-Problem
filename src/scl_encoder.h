@@ -1,5 +1,5 @@
-#ifndef LADDER_ENCODER
-#define LADDER_ENCODER
+#ifndef SCL_ENCODER
+#define SCL_ENCODER
 
 #include "encoder.h"
 #include <map>
@@ -7,11 +7,11 @@
 namespace SATABP
 {
 
-    class LadderEncoder : public Encoder
+    class SCLEncoder : public Encoder
     {
     public:
-        LadderEncoder(Graph *g, ClauseContainer *cc, VarHandler *vh);
-        virtual ~LadderEncoder();
+        SCLEncoder(Graph *g, ClauseContainer *cc, VarHandler *vh);
+        virtual ~SCLEncoder();
 
     private:
         bool is_debug_mode = false;

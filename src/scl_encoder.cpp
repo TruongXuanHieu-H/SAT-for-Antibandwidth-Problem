@@ -1,4 +1,4 @@
-#include "ladder_encoder.h"
+#include "scl_encoder.h"
 #include "math_extension.h"
 
 #include <iostream>
@@ -9,13 +9,13 @@
 
 namespace SATABP
 {
-    LadderEncoder::LadderEncoder(Graph *g, ClauseContainer *cc, VarHandler *vh) : Encoder(g, cc, vh)
+    SCLEncoder::SCLEncoder(Graph *g, ClauseContainer *cc, VarHandler *vh) : Encoder(g, cc, vh)
     {
     }
 
-    LadderEncoder::~LadderEncoder() {}
+    SCLEncoder::~SCLEncoder() {}
 
-    int LadderEncoder::get_obj_k_aux_var(int first, int last)
+    int SCLEncoder::get_obj_k_aux_var(int first, int last)
     {
 
         auto pair = obj_k_aux_vars.find({first, last});
@@ -31,12 +31,12 @@ namespace SATABP
         return new_obj_k_aux_var;
     }
 
-    int LadderEncoder::do_vars_size() const
+    int SCLEncoder::do_vars_size() const
     {
         return vh->size();
     };
 
-    void LadderEncoder::do_encode_antibandwidth(unsigned w, const std::vector<std::pair<int, int>> &node_pairs)
+    void SCLEncoder::do_encode_antibandwidth(unsigned w, const std::vector<std::pair<int, int>> &node_pairs)
     {
         aux_vars.clear();
         obj_k_aux_vars.clear();
@@ -80,7 +80,7 @@ namespace SATABP
         // std::cout << "c\tObj k glue staircase constraints: " << num_obj_k_glue_staircase_constraint << std::endl;
     };
 
-    void LadderEncoder::encode_vertices()
+    void SCLEncoder::encode_vertices()
     {
         /*
             Encode that each label can only be assigned to one node.
@@ -102,7 +102,7 @@ namespace SATABP
         }
     }
 
-    void LadderEncoder::encode_labels()
+    void SCLEncoder::encode_labels()
     {
         /*
             Encode that each vertex can only take one and only one label.
@@ -121,7 +121,7 @@ namespace SATABP
         }
     }
 
-    void LadderEncoder::encode_exactly_one_product(const std::vector<int> &vars)
+    void SCLEncoder::encode_exactly_one_product(const std::vector<int> &vars)
     {
         if (vars.size() < 2)
             return;
@@ -175,7 +175,7 @@ namespace SATABP
         encode_amo_seq(v_vars);
     };
 
-    void LadderEncoder::encode_amo_seq(const std::vector<int> &vars)
+    void SCLEncoder::encode_amo_seq(const std::vector<int> &vars)
     {
         if (vars.size() < 2)
             return;
@@ -200,7 +200,7 @@ namespace SATABP
         num_l_v_constraints++;
     };
 
-    void LadderEncoder::encode_obj_k(unsigned w)
+    void SCLEncoder::encode_obj_k(unsigned w)
     {
         for (int i = 0; i < (int)g->n; i++)
         {
@@ -213,7 +213,7 @@ namespace SATABP
         }
     }
 
-    void LadderEncoder::encode_stair(int stair, unsigned w)
+    void SCLEncoder::encode_stair(int stair, unsigned w)
     {
         if (is_debug_mode)
             std::cout << "Encode stair " << stair << " with width " << w << std::endl;
@@ -267,7 +267,7 @@ namespace SATABP
      * The last window only has upper part.
      * Other windows have both upper part and lower part.
      */
-    void LadderEncoder::encode_window(int window, int stair, unsigned w)
+    void SCLEncoder::encode_window(int window, int stair, unsigned w)
     {
         if (window == 0)
         {
@@ -453,7 +453,7 @@ namespace SATABP
      * Using lower part of the previous window and upper part of the next window
      * as anchor points to glue.
      */
-    void LadderEncoder::glue_window(int window, int stair, unsigned w)
+    void SCLEncoder::glue_window(int window, int stair, unsigned w)
     {
         /*  The stair look like this:
          *      Window 1        Window 2        Window 3        Window 4
@@ -502,7 +502,7 @@ namespace SATABP
         }
     }
 
-    void LadderEncoder::glue_stair(int stair1, int stair2, unsigned w)
+    void SCLEncoder::glue_stair(int stair1, int stair2, unsigned w)
     {
         if (is_debug_mode)
             std::cout << "Glue stair " << stair1 << " with stair " << stair2 << std::endl;

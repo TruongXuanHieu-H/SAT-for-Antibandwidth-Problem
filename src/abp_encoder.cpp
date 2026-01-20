@@ -7,7 +7,7 @@
 #include "sequential_encoder.h"
 #include "product_encoder.h"
 #include "duplex_encoder.h"
-#include "ladder_encoder.h"
+#include "scl_encoder.h"
 
 namespace SATABP
 {
@@ -112,7 +112,7 @@ namespace SATABP
             return 0;
         int min_dist = graph->calculate_antibandwidth(node_labels);
 
-        std::cout << "c " + get_signature() + " Solution check = " << min_dist << "." << std::endl;
+        std::cout << "c " + get_signature() + " Solution check w = " << min_dist << "." << std::endl;
 
         return min_dist;
     }
@@ -222,9 +222,9 @@ namespace SATABP
             enc = new ProductEncoder(graph, cc, vh);
             enc->symmetry_break_point = symmetry_break_strategy;
             break;
-        case ladder:
-            std::cout << "c " + get_signature() + " Initializing a Ladder encoder with n = " << graph->n << "." << std::endl;
-            enc = new LadderEncoder(graph, cc, vh);
+        case scl:
+            std::cout << "c " + get_signature() + " Initializing a SCL encoder with n = " << graph->n << "." << std::endl;
+            enc = new SCLEncoder(graph, cc, vh);
             enc->symmetry_break_point = symmetry_break_strategy;
             break;
         default:

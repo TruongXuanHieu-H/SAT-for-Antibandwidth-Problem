@@ -8,7 +8,7 @@ where '<option>' is one of the following options:
     --seq                           : Use sequential encoding for staircase constraints [default: false],
     --product                       : Use 2-Product encoding for staircase constraints [default: false],
     --duplex                        : Use duplex encoding for staircase constraints [default: false],
-    --ladder                        : Use ladder encoding for staircase constraints [default: true],
+    --scl                        : Use SCL encoding for staircase constraints [default: true],
     --conf-sat                      : Use --sat configuration of CaDiCaL [default: true],
     --conf-unsat                    : Use --unsat configuration of CaDiCaL [default: false],
     --conf-def                      : Use default configuration of CaDiCaL [default: false],
@@ -21,4 +21,3 @@ where '<option>' is one of the following options:
     -set-lb <new LB>                : Overwrite predefined LB with <new LB>, has to be at least 2,
     -set-ub <new UB>                : Overwrite predefined UB with <new UB>, has to be positive,
     -symmetry-break <break point>   : Apply symetry breaking technique in <break point> (f: first node, h: highest degree node, l: lowest degree node, n: none) [default: none],
-    -print-w <w>                    : Only encode and print SAT formula of specified width w (where w > 0), without solving it

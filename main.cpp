@@ -42,7 +42,7 @@ static const std::map<std::string, std::string> option_list = {
     {"--seq", "Use sequential encoding for staircase constraints [default: false]"},
     {"--product", "Use 2-Product encoding for staircase constraints [default: false]"},
     {"--duplex", "Use duplex encoding for staircase constraints [default: true]"},
-    {"--ladder", "Use ladder encoding for staircase constraints and NSC for At-Most-One constraints [default: false]"},
+    {"--scl", "Use scl encoding for staircase constraints and NSC for At-Most-One constraints [default: false]"},
     {"--conf-sat", "Use --sat configuration of CaDiCaL [default: true]"},
     {"--conf-unsat", "Use --unsat configuration of CaDiCaL [default: false]"},
     {"--force-phase", "Set options --forcephase,--phase=0 and --no-rephase of CaDiCal [default: false]"},
@@ -109,13 +109,13 @@ int main(int argc, char **argv)
 
     if (argc < 2)
     {
-        std::cout << "c LadderEncoder 1." << ver << "." << std::endl;
+        std::cout << "c SCLEncoder 1." << ver << "." << std::endl;
         std::cerr << "c Error, no graph file was specified." << std::endl;
         print_usage();
         return 1;
     }
 
-    std::cout << "c LadderEncoder 1." << ver << "." << std::endl;
+    std::cout << "c SCLEncoder 1." << ver << "." << std::endl;
 
     abw_enc = new AntibandwidthEncoder();
 
@@ -147,9 +147,9 @@ int main(int argc, char **argv)
         {
             abw_enc->enc_choice = EncoderStrategy::duplex;
         }
-        else if (argv[i] == std::string("--ladder"))
+        else if (argv[i] == std::string("--scl"))
         {
-            abw_enc->enc_choice = EncoderStrategy::ladder;
+            abw_enc->enc_choice = EncoderStrategy::scl;
         }
         else if (argv[i] == std::string("--conf-sat"))
         {

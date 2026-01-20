@@ -19,7 +19,7 @@ namespace SATABP
         ABPEncoder(std::string symmetry_break_strategy, Graph *graph, int width);
         virtual ~ABPEncoder();
 
-        EncoderStrategy enc_strategy = ladder; // Default strategy
+        EncoderStrategy enc_strategy = scl; // Default strategy
 
         // Solver configurations
         bool force_phase = false;

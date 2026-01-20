@@ -37,14 +37,6 @@ namespace SATABP
             std::cout << "c Iterative strategy: from LB to UB.\n";
             encode_and_solve_abw_problems_from_lb();
             break;
-        case from_ub:
-            std::cout << "c Iterative strategy: from UB to LB.\n";
-            encode_and_solve_abw_problems_from_ub();
-            break;
-        case bin_search:
-            std::cout << "c Iterative strategy: binary search between LB and UB.\n";
-            encode_and_solve_abw_problems_bin_search();
-            break;
         default:
             std::cerr << "c Unrecognized iterative strategy " << iterative_strategy << ".\n";
             return;
@@ -56,16 +48,6 @@ namespace SATABP
         int w_from, w_to;
         setup_bounds(w_from, w_to);
         encode_and_solve_abw_problems(w_from, +1, w_to + 1);
-    };
-
-    void AntibandwidthEncoder::encode_and_solve_abw_problems_from_ub()
-    {
-        std::cerr << "e Iterative strategy UB has not yet implemented.\n";
-    };
-
-    void AntibandwidthEncoder::encode_and_solve_abw_problems_bin_search()
-    {
-        std::cerr << "e Iterative strategy bin has not yet implemented.\n";
     };
 
     std::vector<int> AntibandwidthEncoder::get_child_pids(int ppid)
@@ -440,11 +422,6 @@ namespace SATABP
         std::cout << "r\n";    
     };
 
-    void AntibandwidthEncoder::encode_and_print_abw_problem(int w)
-    {
-        w = w;
-        std::cerr << "e Encode and print ABP have not yet implemented.\n";
-    };
 
     void AntibandwidthEncoder::setup_bounds(int &w_from, int &w_to)
     {

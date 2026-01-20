@@ -328,8 +328,10 @@ namespace SATABP
                         }
 
                         abp_pids.erase(it);
-                        if (abp_pids.empty() && kill(lim_pid, 0) == 0)
+                        if (abp_pids.empty() && kill(lim_pid, 0) == 0
+                            && (current_width >= stop_w || current_width >= min_width_UNSAT))
                         {
+                            std::cout << "c All ABP tasks are done. Terminating limit monitor process " << lim_pid << ".\n";
                             kill(lim_pid, SIGTERM);
                         }
                         break;
@@ -345,7 +347,8 @@ namespace SATABP
                     {
                         std::cout << "c Child pid " << it->first << " - " << it->second << " terminated by signal " << WTERMSIG(status) << "\n";
                         abp_pids.erase(it);
-                        if (abp_pids.empty() && kill(lim_pid, 0) == 0)
+                        if (abp_pids.empty() && kill(lim_pid, 0) == 0
+                            && (current_width >= stop_w || current_width >= min_width_UNSAT))
                         {
                             kill(lim_pid, SIGTERM);
                         }
@@ -361,7 +364,8 @@ namespace SATABP
                     {
                         std::cerr << "e Child pid " << it->first << " - " << it->second << " stopped or otherwise terminated.\n";
                         abp_pids.erase(it);
-                        if (abp_pids.empty() && kill(lim_pid, 0) == 0)
+                        if (abp_pids.empty() && kill(lim_pid, 0) == 0
+                            && (current_width >= stop_w || current_width >= min_width_UNSAT))
                         {
                             kill(lim_pid, SIGTERM);
                         }

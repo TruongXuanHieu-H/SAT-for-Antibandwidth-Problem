@@ -8,6 +8,7 @@
 #include <sstream>
 #include <cmath>
 #include <sys/mman.h>
+#include <sys/prctl.h>
 
 namespace SATABP
 {
@@ -19,18 +20,8 @@ namespace SATABP
     };
 
     AntibandwidthEncoder::~AntibandwidthEncoder()
-    {
-        end_time = std::chrono::high_resolution_clock::now();
-        auto encode_duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
-
-        std::cout << "r\n";
-        std::cout << "r Final results: \n";
-        std::cout << "r Max width SAT:  \t" << (max_width_SAT == std::numeric_limits<int>::min() ? "-" : std::to_string(max_width_SAT)) << "\n";
-        std::cout << "r Min width UNSAT:\t" << (min_width_UNSAT == std::numeric_limits<int>::max() ? "-" : std::to_string(min_width_UNSAT)) << "\n";
-        std::cout << "r Total real time: " << encode_duration << " ms\n";
-        std::cout << "r Total memory consumed " << *max_consumed_memory << " MB\n";
-        std::cout << "r\n";
-        std::cout << "r\n";
+    {        
+        abp_pids.clear();
     };
 
     void AntibandwidthEncoder::read_graph(std::string graph_file_name)
@@ -212,8 +203,7 @@ namespace SATABP
                 sampler_count++;
                 if (sampler_count >= report_rate)
                 {
-                    std::cout << "c [Lim] Sampler:\t" << "Memory: " << consumed_memory << " MB\tReal time: "
-                              << consumed_real_time << "s\tElapsed time: " << consumed_elapsed_time << "s\n";
+                    // std::cout << "c [Lim] Sampler:\t" << "Memory: " << consumed_memory << " MB\tReal time: " << consumed_real_time << "s\tElapsed time: " << consumed_elapsed_time << "s\n";
                     sampler_count = 0;
                 }
                 usleep(sample_rate);
@@ -242,6 +232,7 @@ namespace SATABP
         }
         else if (pid == 0)
         {
+            prctl(PR_SET_PDEATHSIG, SIGTERM);
             std::cout << "c [w = " << width << "] Start task in PID: " << getpid() << ".\n";
 
             // Child process: perform the task
@@ -274,6 +265,7 @@ namespace SATABP
 
     void AntibandwidthEncoder::encode_and_solve_abw_problems(int start_w, int step, int stop_w)
     {
+        fflush(stdout);
         start_time = std::chrono::high_resolution_clock::now();
         create_limit_pid();
 
@@ -423,6 +415,7 @@ namespace SATABP
             // std::cout << log_saved_child_pids;
 
             if (!limit_violated){
+                fflush(stdout);
                 while (int(abp_pids.size()) < process_count && current_width < stop_w && current_width < min_width_UNSAT)
                 {
                     create_abp_pid(current_width);
@@ -432,6 +425,19 @@ namespace SATABP
             
         }
         std::cout << "c All children have completed their tasks or were terminated." << std::endl;
+        
+
+        end_time = std::chrono::high_resolution_clock::now();
+        auto encode_duration = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time).count();
+
+        std::cout << "r\n";
+        std::cout << "r Final results: \n";
+        std::cout << "r Max width SAT:  \t" << (max_width_SAT == std::numeric_limits<int>::min() ? "-" : std::to_string(max_width_SAT)) << "\n";
+        std::cout << "r Min width UNSAT:\t" << (min_width_UNSAT == std::numeric_limits<int>::max() ? "-" : std::to_string(min_width_UNSAT)) << "\n";
+        std::cout << "r Total real time: " << encode_duration << " ms\n";
+        std::cout << "r Total memory consumed " << *max_consumed_memory << " MB\n";
+        std::cout << "r\n";
+        std::cout << "r\n";    
     };
 
     void AntibandwidthEncoder::encode_and_print_abw_problem(int w)

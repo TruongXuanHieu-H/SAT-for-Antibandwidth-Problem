@@ -2,7 +2,7 @@
 
 TIME_LIMIT=1800
 MEMORY_LIMIT=30000
-SYMMETRY_BREAK="h"   # First node
+SYMMETRY_BREAK="h"
 WORKER_COUNT=1
 ENC_TYPE="--duplex"
 ENC_DIR="../../../build"

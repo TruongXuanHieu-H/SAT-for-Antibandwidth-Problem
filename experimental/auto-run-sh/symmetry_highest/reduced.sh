@@ -2,12 +2,12 @@
 
 TIME_LIMIT=1800
 MEMORY_LIMIT=30000
-SYMMETRY_BREAK="f"   # First node
+SYMMETRY_BREAK="h"  
 WORKER_COUNT=1
 ENC_TYPE="--reduced"
 ENC_DIR="../../../build"
 DATASET_DIR="../../Benchmarks"
-LOG_DIR="../../results/symmetry_first/reduced"
+LOG_DIR="../../results/symmetry_highest/reduced"
 ADD_CONFIGS="--from-lb"
 
 mkdir -p "$LOG_DIR"

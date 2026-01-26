@@ -31,7 +31,6 @@ namespace SATABP
         std::string symmetry_break_strategy = "n";
 
         int encode_and_solve_abp();
-        void encode_and_print_abp();
 
     private:
         int SAT_res = 0;
@@ -47,8 +46,6 @@ namespace SATABP
         bool extract_node_labels(std::vector<int> &node_labels);
         void setup_for_solving();
         void cleanup_solving();
-        void setup_for_print();
-        void cleanup_print();
 
         void setup_cadical();
         void setup_encoder();

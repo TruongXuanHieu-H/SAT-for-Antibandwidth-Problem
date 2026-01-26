@@ -95,16 +95,6 @@ namespace SATABP
         return SAT_res;
     };
 
-    void ABPEncoder::encode_and_print_abp()
-    {
-        setup_for_print();
-
-        enc->encode_antibandwidth(width, graph->edges);
-        cc->print_clauses();
-
-        cleanup_print();
-    }
-
     int ABPEncoder::verify_solution()
     {
         std::vector<int> node_labels = std::vector<int>();
@@ -157,24 +147,6 @@ namespace SATABP
         vh = nullptr;
         delete solver;
         solver = nullptr;
-    }
-
-    void ABPEncoder::setup_for_print()
-    {
-        vh = new VarHandler(1, graph->n);
-        cc = new ClauseVector(vh, split_limit);
-
-        setup_encoder();
-    }
-
-    void ABPEncoder::cleanup_print()
-    {
-        delete enc;
-        enc = nullptr;
-        delete cc;
-        cc = nullptr;
-        delete vh;
-        vh = nullptr;
     }
 
     void ABPEncoder::setup_cadical()

@@ -233,7 +233,7 @@ namespace SATABP
     int AntibandwidthEncoder::do_abp_pid_task(int width)
     {
         // Dynamically allocate and use ABPEncoder in child process
-        ABPEncoder *abp_enc = new ABPEncoder(symmetry_break_strategy, graph, width);
+        ABPEncoder *abp_enc = new ABPEncoder(symmetry_break_strategy, graph, width, enc_choice);
         int result = abp_enc->encode_and_solve_abp();
 
         std::cout << "c [w = " << width << "] Result: " << result << "\n";

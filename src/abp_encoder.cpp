@@ -50,6 +50,7 @@ namespace SATABP
 
         setup_for_solving();
         std::cout << "c " + get_signature() + " Encoding starts with w = " << width << ":" << std::endl;
+        std::cout << "c " + get_signature() + " Encode symmetry breaking with option: " << symmetry_break_strategy << "." << std::endl;
 
         auto t1 = std::chrono::high_resolution_clock::now();
         enc->encode_antibandwidth(width, graph->edges);
